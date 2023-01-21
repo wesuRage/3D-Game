@@ -1,12 +1,22 @@
 import Core from './core';
-import * as GEOMETRY from './geometries';
+var socket = io();
 
 function main(){
     const scene = new Core();
     scene.init();
     scene.resize();
 
-    let cube = new GEOMETRY.Geometry().BoxGeometry(1, 1, 1, 0xa0ffa0, false);
+    let cube = scene.BoxGeometry(1, 1, 1, 0xffff00, false);
+
+    if(document.cookie == ''){
+        socket.on('player', (val: any) => {
+            document.cookie = `id=${val.id}; color=${val.color}`
+            cube.material.color.setHex(val.color);
+        });
+    }else{
+        // TODO: use cookies to set id and color
+    }
+    
 
     scene.add(cube);
 
